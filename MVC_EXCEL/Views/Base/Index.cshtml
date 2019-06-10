@@ -1,0 +1,57 @@
+﻿@model IEnumerable<MVC_EXCEL.Models.TableModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<!-- For Ajax Calls -->
+<script>
+
+        $(function () {
+            $(document).on('click', 'a', function (e) {
+                //$('a').on('click',function (e) {
+                if ($(this).attr('linkval') != 'Navigate to Home Page') {
+                    e.preventDefault();
+                    var name = $(this).attr('linkval');
+                    //console.log(name);
+                    $.ajax({
+                        url: "@Url.Action("GetNewPage", "Base")",
+                        type: "get",
+                        data: { PageName: name },
+                        dataType: 'json',
+                        success: function (data) {
+                            $('.body-content').html(data);
+                            if ($('#hiddenval').val() != null) {
+                                $('body').unmark().mark($('#hiddenval').val(), {
+                                    "separateWordSearch": false
+                                });
+                                $('#Entered').val($('#hiddenval').val());
+                            }
+                        },
+                        error: function (e) {
+                            console.log(e.reponseText);
+                        }
+                    });
+                }
+            });
+        });
+
+</script>
+
+
+<!-- For Ajax Calls -->
+
+
+
+@foreach (var item in Model)
+{
+    @Html.Raw(item.PageContent);
+}
+
+
+@*@using (Html.BeginForm("FinderPage", "Base", FormMethod.Post))
+    {
+        @Html.TextBox("searchtext"," ",new { @class = "form-control" , @style = "width: 50%;" })
+        <input class="btn btn-primary" style="float:left;" type="submit" value="Submit" />
+    }*@
+

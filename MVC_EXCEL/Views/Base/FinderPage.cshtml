@@ -1,0 +1,206 @@
+﻿@model IEnumerable<MVC_EXCEL.Models.TableModel>
+
+@{
+    ViewBag.Title = "FinderPage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.TextBox("hiddenfield", TempData["searched"], new { @type = "hidden", @id = "hiddenval" })
+<a id="moveToTop" href="#HomeInFinder" style="
+    position: fixed;
+    bottom: 20px;
+    right: 10px;
+"><img src="~/Content/arrow-up.png" style="max-height:20px;"></a>
+<center>
+    <div id="HomeInFinder">
+        @Html.ActionLink("Navigate to Home Page", "Index", "Base", new { @linkval = "Navigate to Home Page", @align = "center", @style = "font-size:16px;font-weight:bold;" })
+    </div>
+</center>
+<br />
+@*@foreach (var item in Model)
+    {*@
+
+<div class="dataresults" style="text-align:center;">
+
+    <table align="center">
+        <tr>
+            <td>
+                <span style="font-weight:bold">Document</span>
+            </td>
+            <td>
+                <span style="font-weight:bold">Page</span>
+            </td>
+            <td>
+                &nbsp;
+            </td>
+        </tr>
+    </table>
+
+
+</div>
+
+<div class="databody" style="margin-top:30px;margin-left:10px;margin-right:10px;width:95%;display:none;">
+    @* @Html.Raw(item.PageContent)*@
+    @Html.Action("GetHtmlPage")
+</div>
+@*}*@
+
+
+
+<script>
+    $(window).scroll(function () {
+        if ($(window).scrollTop() > 30) {
+            $('nav').css('visibility', 'hidden');
+        }
+        else {
+            $('nav').css('visibility', 'visible');
+        }
+    });
+
+    $(function () {
+        $('.dataresults').on('click', 'a', function () {
+
+            $('.dataresults').css({ 'display': 'none' });
+            $('.databody').css('display', 'block');
+            debugger;
+            slowScrollFunding = $($(this).attr("href") + " mark:nth-child(" + $(this).attr("data-id") + ")").offset().top;
+            $('html, body, #home-wrap').animate({ scrollTop: slowScrollFunding }, 1);
+
+        });
+    });
+
+    $(function () {
+        var prevbtn = $('<button class="btn btn-info col-xs-2" data-search="prev" style="margin-right: 15px;visibility:hidden;">Previous</button>');
+        var nextbtn = $('<button class= "btn btn-info col-xs-2" data-search="next" style = "visibility:hidden;">Next</button>');
+        $('nav div.container div.mybtns').append(prevbtn, nextbtn);
+        // the input field
+        var $input = $("input[type='search']"),
+            // clear button
+            $clearBtn = $("button[data-search='clear']"),
+            // prev button
+            $prevBtn = $("button[data-search='prev']"),
+            // next button
+            $nextBtn = $("button[data-search='next']"),
+            // the context where to search
+            $content = $(".databody"),
+            // jQuery object to save <mark> elements
+            $results,
+            // the class that will be appended to the current
+            // focused element
+            currentClass = "current",
+            // top offset for the jump (the search bar)
+            offsetTop = 250,
+            // the current index of the focused element
+            currentIndex = 0;
+        /**
+         * Jumps to the element matching the currentIndex
+         */
+        function jumpTo() {
+            if ($results.length) {
+                var position,
+                    $current = $results.eq(currentIndex);
+                $results.removeClass(currentClass);
+                if ($current.length) {
+                    $current.addClass(currentClass);
+                    position = $current.offset().top - offsetTop;
+                    window.scrollTo(0, position);
+                }
+            }
+        }
+
+        var searchTerm = '/' + $('#hiddenval').val() + '/';
+
+        var flags = searchTerm.replace(/.*\/([gimy]*)$/, '$1');
+        var pattern = searchTerm.replace(new RegExp('^/(.*?)/' + flags + '$'), '$1');
+        var regex = new RegExp(pattern, flags);
+        //var regex = new RegExp(pattern + ".*?[.]{1}", 'gi');
+
+        /**
+
+
+var flags = searchTerm.replace(/.*\/([gimy]*)$/, '$1');
+        var pattern = searchTerm.replace(new RegExp('^/(.*?)/' + flags + '$'), '$1');
+        var regex = new RegExp(pattern+".*[.]{1}", 'gi');
+
+
+
+    var flags = searchTerm.replace(/.*\/([gimy]*)$/, '$1');
+        var pattern = searchTerm.replace(new RegExp('^/(.*?)/' + flags + '$'), '$1');
+        var regex = new RegExp(pattern, flags);
+
+
+         * Searches for the entered keyword in the
+         * specified context on input
+         /[A-Z a-z 0-9 ,]*invidunt[A-Z a-z 0-9 , ]*./
+        var flags = searchTerm.replace(/.*\/([gimy]*)$/, '$1');
+        var pattern = searchTerm.replace(new RegExp('^/(.*?)/' + flags + '$'), '$1');
+        pattern = '.[A-Z a-z 0-9]*' + pattern + '[A-Z a-z 0-9]*.'
+
+        /[A-Z a-z 0-9,()"']*emp[A-Z a-z 0-9,() ]*./
+         */
+        //searchTerm = '/[A-Z a-z0-9]*' + searchTerm +'/[A-Z a-z0-9]*./'
+        // Highlight search term inside a specific context
+        $content.unmark({
+            done: function () {
+                //alert(regex);
+                $content.markRegExp(regex, {
+                    done: function () {
+                        $results = $content.find("mark");
+                        if ($results.length === 0) {
+                            $('.databody').css({ 'visibility': 'hidden' });
+                            $('.dataresults').html('<div><center><h3>No Results Found</h3></center></div>');
+                        }
+                        else {
+                            var count = 0;
+                            var curParent = "", nextParent = "";
+                            $.each($results, function (i, v) {
+                                $parent = $($results[i]).parents('page');
+                                nextParent = curParent;
+                                curParent = $parent.attr('id');
+                                if (curParent == nextParent || nextParent == "") {
+                                    count++;
+                                }
+                                else {
+                                    count = 1;
+                                }
+                                $('.dataresults table').append('<tr><td> Safety Handbook </td><td> ' + $parent.attr('id') + '</td><td> <a href="#' + $parent.attr('id') + '" data-id=' + count + '> Go to Page </a></td></div>');
+
+                            });
+                        }
+                    }
+                });
+            }
+        });
+
+        $('#moveToTop').click(function () {
+            $('.databody').css({ 'display': 'none' });
+            $('.dataresults').css({ 'display': 'block' });
+        });
+        /**
+         * Clears the search
+
+         */
+
+        $clearBtn.on("click", function () {
+            $content.unmark();
+            $input.val("").focus();
+        });
+
+        /**
+         * Next and previous search jump to
+         */
+        $nextBtn.add($prevBtn).on("click", function () {
+            if ($results.length) {
+                currentIndex += $(this).is($prevBtn) ? -1 : 1;
+                if (currentIndex < 0) {
+                    currentIndex = $results.length - 1;
+                }
+                if (currentIndex > $results.length - 1) {
+                    currentIndex = 0;
+                }
+                jumpTo();
+            }
+        });
+    });
+
+</script>

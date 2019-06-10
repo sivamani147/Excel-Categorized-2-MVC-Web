@@ -1,0 +1,152 @@
+﻿.navbar-inverse {
+    height: 75px;
+}
+
+page div {
+    margin-top: 51px;
+    text-align: center;
+}
+
+page p[align=right]{
+    color: brown;
+}
+
+.dataresults a{
+    text-decoration:underline;
+}
+
+span:nth-child(2){
+    margin-left:20px;
+    margin-right:20px;
+    text-align:center;
+}
+
+span:nth-child(1){
+    text-align: left;
+}
+
+mark {
+    padding: 0;
+    background-color: red;
+    color: inherit;
+}
+
+mark.current {
+        background: red;
+        color: black;
+}
+
+input.btn.btn-primary {
+    display: inline;
+    width: 70px;
+    text-align: center;
+    font-size: 15px;
+    vertical-align: initial;
+}
+
+#searchtext {
+    width: 200px;
+    display: inline;
+}
+
+html,
+body {
+    font-size: 14px !important;
+}
+
+h1 {
+    font-size: 1.602em;
+}
+
+h2 {
+    font-size: 1.424em;
+}
+
+h3 {
+    font-size: 1.266em;
+}
+
+h4 {
+    font-size: 1.125em;
+}
+
+h5 {
+    font-size: 0.889em;
+}
+
+h6 {
+    font-size: 0.79em;
+}
+
+.display-1 {
+    font-size: 3.906em;
+}
+
+.display-2 {
+    font-size: 3.125em;
+}
+
+.display-3 {
+    font-size: 2.5em;
+}
+
+.display-4 {
+    font-size: 2em;
+}
+
+
+@media (min-width: 48em) {
+h1
+{
+    font-size: 2.441em;
+}
+
+h2 {
+    font-size: 1.953em;
+}
+
+h3 {
+    font-size: 1.563em;
+}
+
+h4 {
+    font-size: 1.25em;
+}
+
+.display-1 {
+    font-size: 6em;
+}
+
+.display-2 {
+    font-size: 5.5em;
+}
+
+.display-3 {
+    font-size: 4.5em;
+}
+
+.display-4 {
+    font-size: 3.5em;
+}
+
+}
+
+@media (min-width: 62em) {
+    html, body
+
+{
+    font-size: 16px !important;
+}
+
+}
+
+
+@media (min-width: 75em) {
+    html, body
+
+{
+    font-size: 18px !important;
+}
+
+}
+
